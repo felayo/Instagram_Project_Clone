@@ -12,8 +12,9 @@ const store = createStore(Reducers, applyMiddleware(thunk));
 
 //*****8 */ Start firebase //
 import { initializeApp } from "firebase/app";
-import { getFirestore} from 'firebase/firestore';
-import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from "firebase/storage";
+//import { getAnalytics } from "firebase/analytics";
 
 
 const firebaseConfig = {
@@ -29,8 +30,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
+export const storage = getStorage(app);
 const auth = getAuth(app);
-const analytics = getAnalytics(app);
+//const analytics = getAnalytics(app);
 
 
 //****** */ End Firebase //  
@@ -42,6 +44,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './components/auth/landing';
 import Register from './components/auth/register';
 import Main from './components/Main';
+import AddScreen from './components/Main/Add'
+import SaveScreen from './components/Main/Save'
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -103,11 +107,15 @@ class App extends Component {
 
       return(
         <Provider store={store}>
-          <Stack.Navigator initialRouteName="Main">
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Main">
 
-            <Stack.Screen name="Main" component={Main} options={{headerShown: true}}/>
-              
-          </Stack.Navigator>
+              <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+              <Stack.Screen name="Add" component={AddScreen} navigation={this.props.navigation} />
+              <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation}/>
+                
+            </Stack.Navigator>
+          </NavigationContainer>
         </Provider>
        
       );
